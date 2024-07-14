@@ -19,7 +19,7 @@ class LaravelInstallerServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/Routes/web.php');
 
         // Load views from the package
-        $this->loadViewsFrom(__DIR__.'/Resources/views', 'installer');
+        $this->loadViewsFrom(__DIR__.'/Resources/views/install', 'installer');
 
         // Publish views so they can be customized by the application
         $this->publishes([
@@ -27,6 +27,8 @@ class LaravelInstallerServiceProvider extends ServiceProvider
         ], 'views');
 
         // Register the middleware
+        $router = $this->app['router'];
+        $router->aliasMiddleware('installer.check', CheckInstallation::class);
         $this->app[Kernel::class]->pushMiddleware(CheckInstallation::class);
     }
 
